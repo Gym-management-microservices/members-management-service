@@ -12,14 +12,14 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @PostMapping
+    @PostMapping("/registration")
     public Member addMember(@RequestBody Member member) {
         return memberService.registerMember(member);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public Iterable<Member> getAllMembers() {
         return memberService.findAll();
     }
-    
+
 }
