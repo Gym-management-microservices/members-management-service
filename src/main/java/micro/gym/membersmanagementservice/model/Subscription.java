@@ -1,5 +1,6 @@
 package micro.gym.membersmanagementservice.model;
 
+import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @Data
 @Setter
 @Getter
+@Embeddable
 public class Subscription {
 
     private LocalDate startDate;
