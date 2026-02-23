@@ -7,8 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MemberRepository extends JpaRepository<Member, MemberId> {
 
     Member findByEmail(String email);
-    Member findByMemberId(MemberId memberId);
-    void deleteByMemberId(MemberId memberId);
-    boolean isActiveMember(MemberId memberId);
 
 }

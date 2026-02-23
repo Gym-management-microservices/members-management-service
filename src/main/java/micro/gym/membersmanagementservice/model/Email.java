@@ -13,10 +13,6 @@ import lombok.NoArgsConstructor;
 public class Email {
     private String email_value;
 
-    public Email() {
-    }
-
-
     public String getEmail_value() {
         return email_value;
     }
