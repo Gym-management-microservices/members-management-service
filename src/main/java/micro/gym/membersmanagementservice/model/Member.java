@@ -21,7 +21,7 @@ public class Member {
     private MemberId id;
 
     @Column(name = "name")
-    private String nombre;
+    private String name;
 
     @Embedded
     private Email email;
