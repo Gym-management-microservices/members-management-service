@@ -20,7 +20,7 @@ public class Member {
     @EmbeddedId
     private MemberId id;
 
-    @Column(name = "nombre")
+    @Column(name = "name")
     private String nombre;
 
     @Embedded
