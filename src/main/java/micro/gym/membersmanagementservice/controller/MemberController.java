@@ -7,19 +7,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("members")
+@RequestMapping("/members")
 public class MemberController {
 
     @Autowired
     private MemberService memberService;
 
-    @PostMapping("/registration")
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public Member addMember(@RequestBody Member member) {
+    public Member createMember(@RequestBody Member member) {
         return memberService.registerMember(member);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public Iterable<Member> getAllMembers() {
         return memberService.findAll();
