@@ -29,7 +29,7 @@ public class DataLoader implements CommandLineRunner {
 
         memberRepository.save(micro.gym.membersmanagementservice.model.Member.builder()
                 .id(memberId)
-                .nombre(name)
+                .name(name)
                 .email(email)
                 .registrationDate(registrationDate)
                 .subscription(subscription)

@@ -31,7 +31,7 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
-    public Member registerMember(Member member) {
+    public Member registerMember(Member member)  {
         return memberRepository.save(member);
     }
 
