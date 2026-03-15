@@ -1,8 +1,11 @@
 package micro.gym.membersmanagementservice.controller;
 
+import micro.gym.membersmanagementservice.model.DatosEntrenamiento;
 import micro.gym.membersmanagementservice.model.Member;
+import micro.gym.membersmanagementservice.service.EntrenamientoProducer;
 import micro.gym.membersmanagementservice.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +17,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/members")
 @Tag(name = "Members", description = "Gestión de miembros del gimnasio")
@@ -21,6 +26,8 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private EntrenamientoProducer trainerProducer;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -56,4 +63,27 @@ public class MemberController {
         return memberService.findAll();
     }
 
-}
+    @Operation(
+            summary = "Registrar entrenamiento",
+            description = "Registra los datos de entrenamiento de un miembro y los envía a Kafka para procesamiento en tiempo real"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Entrenamiento registrado exitosamente"),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tiene permisos")
+    })
+    @RequestMapping("/train/register")
+        @PostMapping
+        @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER', 'MEMBER')")
+        public void registrarEntrenamiento(
+                @RequestBody DatosEntrenamiento datos) {
+            datos.setFecha(LocalDateTime.now());
+            memberService.inscribir(datos);
+        }
+    }
