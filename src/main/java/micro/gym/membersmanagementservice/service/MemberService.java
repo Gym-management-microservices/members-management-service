@@ -1,5 +1,6 @@
 package micro.gym.membersmanagementservice.service;
 
+import micro.gym.membersmanagementservice.model.DatosEntrenamiento;
 import micro.gym.membersmanagementservice.model.Member;
 import micro.gym.membersmanagementservice.model.MemberId;
 import micro.gym.membersmanagementservice.repository.MemberRepository;
@@ -14,6 +15,9 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private EntrenamientoProducer entrenamientoProducer;
 
     public List<Member> findAll() {
         return memberRepository.findAll();
@@ -31,7 +35,7 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
-    public Member registerMember(Member member) {
+    public Member registerMember(Member member)  {
         return memberRepository.save(member);
     }
 
@@ -43,5 +47,10 @@ public class MemberService {
         return false;
     }
 
+    public void inscribir(DatosEntrenamiento datos) {
+        Member member = memberRepository.findById(datos.getMemberId())
+                .orElseThrow(() -> new RuntimeException("Miembro no encontrado: " + datos.getMemberId()));
+        entrenamientoProducer.enviarDatos(datos);
+    }
 }
 
