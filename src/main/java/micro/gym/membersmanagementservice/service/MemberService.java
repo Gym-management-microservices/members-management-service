@@ -16,6 +16,9 @@ public class MemberService {
 
     @Autowired
     private MemberRegisteredProducer memberRegisteredProducer;
+    
+    @Autowired
+    private EntrenamientoProducer entrenamientoProducer;
 
     public List<Member> findAll() {
         return memberRepository.findAll();
@@ -45,6 +48,12 @@ public class MemberService {
            if(member.getSubscription().isActive())return true;
         }
         return false;
+    }
+  
+   public void inscribir(DatosEntrenamiento datos) {
+        Member member = memberRepository.findById(datos.getMemberId())
+                .orElseThrow(() -> new RuntimeException("Miembro no encontrado: " + datos.getMemberId()));
+        entrenamientoProducer.enviarDatos(datos);
     }
 
 }
