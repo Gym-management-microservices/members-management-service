@@ -87,3 +87,4 @@ public class MemberController {
             memberService.inscribir(datos);
         }
     }
+

@@ -1,6 +1,5 @@
 package micro.gym.membersmanagementservice.service;
 
-import micro.gym.membersmanagementservice.model.DatosEntrenamiento;
 import micro.gym.membersmanagementservice.model.Member;
 import micro.gym.membersmanagementservice.model.MemberId;
 import micro.gym.membersmanagementservice.repository.MemberRepository;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -16,6 +14,9 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private MemberRegisteredProducer memberRegisteredProducer;
+    
     @Autowired
     private EntrenamientoProducer entrenamientoProducer;
 
@@ -35,8 +36,10 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
-    public Member registerMember(Member member)  {
-        return memberRepository.save(member);
+    public Member registerMember(Member member) {
+        Member saved = memberRepository.save(member);
+        memberRegisteredProducer.publishMemberRegistered(saved);
+        return saved;
     }
 
     public boolean isActiveMember(MemberId memberId) {
@@ -46,11 +49,12 @@ public class MemberService {
         }
         return false;
     }
-
-    public void inscribir(DatosEntrenamiento datos) {
+  
+   public void inscribir(DatosEntrenamiento datos) {
         Member member = memberRepository.findById(datos.getMemberId())
                 .orElseThrow(() -> new RuntimeException("Miembro no encontrado: " + datos.getMemberId()));
         entrenamientoProducer.enviarDatos(datos);
     }
+
 }
 
