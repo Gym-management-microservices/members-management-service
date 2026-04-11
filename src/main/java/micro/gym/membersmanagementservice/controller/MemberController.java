@@ -63,8 +63,6 @@ public class MemberController {
         return memberService.findAll();
     }
 
-    @PostMapping("/train/register")
-    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER', 'MEMBER')")
     @Operation(
             summary = "Registrar entrenamiento",
             description = "Registra los datos de entrenamiento de un miembro y los envía a Kafka para procesamiento en tiempo real"
