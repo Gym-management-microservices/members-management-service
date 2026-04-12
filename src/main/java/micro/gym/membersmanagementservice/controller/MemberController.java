@@ -63,6 +63,7 @@ public class MemberController {
         return memberService.findAll();
     }
 
+    @RequestMapping("/train/register")
     @Operation(
             summary = "Registrar entrenamiento",
             description = "Registra los datos de entrenamiento de un miembro y los envía a Kafka para procesamiento en tiempo real"
