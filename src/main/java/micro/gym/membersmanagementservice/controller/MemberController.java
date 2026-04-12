@@ -63,6 +63,7 @@ public class MemberController {
         return memberService.findAll();
     }
 
+    @RequestMapping("/train/register")
     @Operation(
             summary = "Registrar entrenamiento",
             description = "Registra los datos de entrenamiento de un miembro y los envía a Kafka para procesamiento en tiempo real"
@@ -70,21 +71,33 @@ public class MemberController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Entrenamiento registrado exitosamente"),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "No autenticado"),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "No tiene permisos")
+                    description = "Entrenamiento registrado exitosamente",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = DatosEntrenamiento.class),
+                            examples = @ExampleObject(
+                                    value = "{ \"memberId\": \"M001\", \"trainerId\": \"T001\", \"tipoEntrenamiento\": \"Fuerza\", \"duracionMinutos\": 60 }"
+                            )
+                    )
+            ),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+            @ApiResponse(responseCode = "401", description = "No autenticado"),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos")
     })
-    @RequestMapping("/train/register")
-        @PostMapping
-        @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER', 'MEMBER')")
-        public void registrarEntrenamiento(
-                @RequestBody DatosEntrenamiento datos) {
-            datos.setFecha(LocalDateTime.now());
-            memberService.inscribir(datos);
-        }
-    }
+    public void registrarEntrenamiento(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Datos del entrenamiento realizado por el miembro",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"memberId\": \"M001\", \"trainerId\": \"T001\", \"tipoEntrenamiento\": \"Fuerza\", \"duracionMinutos\": 60 }"
+                            )
+                    )
+            )
+            @RequestBody DatosEntrenamiento datos) {
 
+        datos.setFecha(LocalDateTime.now());
+        memberService.inscribir(datos);
+    }
+}

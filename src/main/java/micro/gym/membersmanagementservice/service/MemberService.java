@@ -1,5 +1,6 @@
 package micro.gym.membersmanagementservice.service;
 
+import micro.gym.membersmanagementservice.model.DatosEntrenamiento;
 import micro.gym.membersmanagementservice.model.Member;
 import micro.gym.membersmanagementservice.model.MemberId;
 import micro.gym.membersmanagementservice.repository.MemberRepository;
@@ -49,7 +50,7 @@ public class MemberService {
         }
         return false;
     }
-  
+
    public void inscribir(DatosEntrenamiento datos) {
         Member member = memberRepository.findById(datos.getMemberId())
                 .orElseThrow(() -> new RuntimeException("Miembro no encontrado: " + datos.getMemberId()));
